@@ -1,0 +1,11 @@
+<h1>CSV importieren</h1>
+
+<p>Bitte csv-Datei auswählen</p>
+
+<%= form_for :guest, :html  => {:multipart  => true} do |f| %>
+  <div class="field">
+    <%= file_field_tag 'file' %>
+    <%= f.submit 'Import' %>
+  </div>
+
+<% end %>

@@ -11,26 +11,23 @@ module CsvMapper
       def csv_mapper_config( options = {} )
         defaults = {
             :action => :import,
-            :params => [],
             :mapping => {},
-            :file_field => 'file'
+            :file_field => :file
         }
         options = defaults.merge(options)
         write_inheritable_attribute(:map_fields_options, options)
-        #before_filter :map_fields, :only => options[:action]
-        #after_filter :map_fields_cleanup, :only => options[:action]
       end
     end
 
     def import
-      debugger
-      if request.post?
-        @mapped_fields = CsvMapper::Importer.new(params)
-        if @mapped_fields
 
+      if request.post?
+        @mapper = CsvMapper::Importer.new(params, self.class.read_inheritable_attribute(:map_fields_options))
+
+        if params[:fields]
           save_errors = []
           #TODO Guest.new(@mapped_fields)
-          @mapped_fields.each do |row|
+          @mapper.data.each do |row|
             guest = Guest.new(
                 :event => @event,
                     :confirmed  => false,

@@ -1,46 +1,26 @@
+require 'fastercsv'
+
 class CsvMapper::Importer
-  def initialize( params )
+  attr_accessor :map_fields, :raw_data, :file_path
 
-    options =  self.class.read_inheritable_attribute(:map_fields_options)
+  def initialize(params, options)
+    @params = params
+    temp_file = params[options[:file_field]]
+    @file_path = params[:file_path] || temp_file.path
 
-    if session[:map_fields].nil? || params[options[:file_field]]
-      session[:map_fields] = {}
-      if params[options[:file_field]].blank?
-        @map_fields_error = CsvMapper::MissingFileContentsError
-        return
-      end
-
-      file_field = params[options[:file_field]]
-
-      temp_path = File.join(Dir::tmpdir, "map_fields_#{Time.now.to_i}_#{$$}")
-      File.open(temp_path, 'wb') do |f|
-        f.write file_field.read
-      end
-
-      session[:map_fields][:file] = temp_path
-
-      @rows = []
-      FasterCSV.foreach(temp_path, FCSV_OPTIONS) do |row|
-        @rows << row
-        break if @rows.size == 10
-      end
-
-      @fields = options[:mapping]
-
-      @parameters = []
-      options[:params].each do |param|
-        @parameters += ParamsParser.parse(params, param)
-      end
+    if @file_path
+      @raw_data = FasterCSV.open(@file_path, CsvMapper.options)
+      @map_fields = options[:mapping]
     else
-      if session[:map_fields][:file].nil? || params[:fields].nil?
-        session[:map_fields] = nil
-        @map_fields_error =  CsvMapper::InconsistentStateError
-      else
-        @mapped_fields = CsvMapper::Reader.new(
-            session[:map_fields][:file],
-                params[:fields],
-                params[:ignore_first_row])
-      end
+      raise CsvMapper::MissingFileContentsError
     end
+  end
+
+  def data
+    CsvMapper::Reader.new(
+      @file_path,
+      @params[:fields],
+      @params[:ignore_first_row]
+    )
   end
 end
