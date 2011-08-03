@@ -1,0 +1,24 @@
+== Description
+
+This gem adds a new import-action everywhere you include it. It asks for a csv-File, then tries to automatch the fields.
+It renders a match-view to review the mapping and finally saves the new entries.
+
+== Installation
+
+Rails 3:
+
+Gemfile:
+
+    gem 'csv_mapper', :git => git://github.com/masche842/csv_mapper.git
+
+Then set a route:
+
+routes.rb
+
+    resources :myresource do
+      get 'import', :on => :collection
+      post 'import', :on => :collection
+    end
+
+
+call /myresources/import!
