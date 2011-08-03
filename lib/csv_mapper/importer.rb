@@ -6,7 +6,8 @@ class CsvMapper::Importer
   def initialize(params, options)
     @params = params
     temp_file = params[options[:file_field]]
-    @file_path = params[:file_path] || temp_file.path
+
+    @file_path = params[:file_path] || ( temp_file.path unless temp_file.nil? )
 
     if @file_path
       @raw_data = FasterCSV.open(@file_path, CsvMapper.options)
