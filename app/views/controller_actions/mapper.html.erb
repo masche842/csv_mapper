@@ -1,0 +1,40 @@
+<h1>CSV importieren</h1>
+
+<p>Bitte Felder mappen</p>
+
+<%= form_tag nil, :id => 'map_fields_form', :method => :post do -%>
+  <%= hidden_field_tag :file_path, @mapper.file_path %>
+  <div class="map_fields">
+    <table cellspacing="0">
+      <thead>
+        <tr>
+          <%- header = @mapper.raw_data.first -%>
+          <%- header.size.times do |column_index| -%>
+            <th>
+              <%= select_tag("fields[#{column_index + 1}]", options_for_select(
+                @mapper.map_fields,
+                @mapper.map_fields[header[column_index]]
+              ), :include_blank => true, :class => 'field_options') %>
+            </th>
+          <%- end -%>
+        </tr>
+      </thead>
+      <tbody>
+        <%- @mapper.raw_data.each do |row| -%>
+          <tr>
+            <%- row.each do |column| -%>
+              <td><%= h(column) -%></td>
+            <%- end -%>
+          </tr>
+        <%- end -%>
+      </tbody>
+    </table>
+  </div>
+  <div class="option">
+    <%= check_box_tag 'ignore_first_row', '1', true, :id => 'ignore_first_row_option' %>
+    <label for="ignore_first_row_option">Ignore the first row (headings)</label>
+  </div>
+  <div class="action">
+    <%= submit_tag 'Import' %>
+  </div>
+<%- end -%>

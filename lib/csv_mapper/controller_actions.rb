@@ -2,48 +2,34 @@ require 'fastercsv'
 
 module CsvMapper
   module ControllerActions
-
+    
     def self.included(base)
       base.extend(ClassMethods)
     end
-
+    
     module ClassMethods
       def csv_mapper_config( options = {} )
         defaults = {
-            :action => :import,
-            :mapping => {},
-            :file_field => :file
+          :action => :import,
+          :mapping => {},
+          :file_field => :file
         }
         options = defaults.merge(options)
         write_inheritable_attribute(:map_fields_options, options)
       end
     end
-
+    
     def import
-
+      resource_name = self.class.name.gsub(/Controller/, '').singularize
+      resource_class = resource_name.constantize
       if request.post?
         @mapper = CsvMapper::Importer.new(params, self.class.read_inheritable_attribute(:map_fields_options))
-
         if params[:fields]
           save_errors = []
-          #TODO Guest.new(@mapped_fields)
           @mapper.data.each do |row|
-            guest = Guest.new(
-                :event => @event,
-                    :confirmed  => false,
-                    :svr_identifier => row[:svr_identifier],
-                    :svr_notes => row[:svr_notes]
-            )
-            guest.build_person(
-                :title => row[:title],
-                    :lastname  =>  row[:lastname],
-                    :firstname  => row[:firstname],
-                    :jobtitle => row[:jobtitle]
-            )
-            guest.build_company(:name => row[:company])
-
-            unless guest.save
-              save_errors.push guest.errors
+            resource = resource_class.new(row)
+            unless resource.save
+              save_errors.push resource.errors
             end
           end
           if save_errors.empty?
@@ -51,20 +37,20 @@ module CsvMapper
             redirect_to :action => :index
           else
             flash[:warning] = save_errors
-            render
+            render 'controller_actions/import'
           end
         else
-          render "mapper"
+          render 'controller_actions/mapper'
         end
       else
-        render 'import'
+        render 'controller_actions/import'
       end
     rescue CsvMapper::InconsistentStateError
       flash[:warning] = 'unbekannter Fehler.'
     rescue CsvMapper::MissingFileContentsError
       flash[:warning] = 'Bitte eine CSV-Datei hochladen.'
-      render
+      render 'controller_actions/import'
     end
-
+    
   end
 end
