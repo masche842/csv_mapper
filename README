@@ -20,5 +20,13 @@ routes.rb
       post 'import', :on => :collection
     end
 
+Include it in your myresource-controller:
+
+    require 'csv_mapper'
+
+    include CsvMapper
+
+
+== Usage
 
 call /myresources/import!

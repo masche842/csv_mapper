@@ -3,6 +3,7 @@ require 'csv_mapper/controller_actions'
 require 'csv_mapper/engine'
 require 'csv_mapper/importer'
 require 'csv_mapper/reader'
+require 'csv_mapper/file_handler'
 
 module CsvMapper
 

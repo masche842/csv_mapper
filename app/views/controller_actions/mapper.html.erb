@@ -3,7 +3,7 @@
 <p>Bitte Felder mappen</p>
 
 <%= form_tag nil, :id => 'map_fields_form', :method => :post do -%>
-  <%= hidden_field_tag :file_path, @mapper.file_path %>
+  <%= hidden_field_tag :filename, @mapper.filename %>
   <div class="map_fields">
     <table cellspacing="0">
       <thead>

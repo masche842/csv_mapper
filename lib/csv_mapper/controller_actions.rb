@@ -23,10 +23,11 @@ module CsvMapper
       resource_name = self.class.name.gsub(/Controller/, '').singularize
       resource_class = resource_name.constantize
       if request.post?
-        @mapper = CsvMapper::Importer.new(params, self.class.read_inheritable_attribute(:map_fields_options))
+        # already mapped
         if params[:fields]
           save_errors = []
-          @mapper.data.each do |row|
+          reader = CsvMapper::Reader.new(params)
+          reader.each do |row|
             resource = resource_class.new(row)
             unless resource.save
               save_errors.push resource.errors
@@ -34,12 +35,15 @@ module CsvMapper
           end
           if save_errors.empty?
             flash[:notice] = 'Daten erfolgreich importiert!'
+            reader.remove_file
             redirect_to :action => :index
           else
             flash[:warning] = save_errors
             render 'controller_actions/import'
           end
+        #no mapping yet
         else
+          @mapper = CsvMapper::Importer.new(params, self.class.read_inheritable_attribute(:map_fields_options))
           render 'controller_actions/mapper'
         end
       else
