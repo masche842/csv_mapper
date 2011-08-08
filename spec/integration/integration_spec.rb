@@ -7,9 +7,7 @@ describe CsvMapper do
 end
 
 describe "Integration" do
-  it "adds an import action to a controller" do
-
-  end
+  it "should add an import action to a controller"
 
   describe "import" do
 
