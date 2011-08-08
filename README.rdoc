@@ -44,6 +44,11 @@ See also the implementation in spec/dummy!
 
 call /myresources/import!
 
+== Thanks
+
+This gem is heavily based on Andrew Timberlake's map-fields-gem (http://github.com/internuity/map-fields).
+Nevertheless I didn't fork it, because the changes are fundamental.
+
 == License
 
 MIT License. Copyright 2011 magiclabs* (magiclabs.de)
