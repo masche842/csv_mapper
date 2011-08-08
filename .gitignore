@@ -1,5 +1,6 @@
 spec/dummy/tmp/*
 spec/dummy/log/*
+spec/dummy/db/*
 .idea
 *.gem
 .bundle

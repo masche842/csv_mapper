@@ -19,28 +19,20 @@ module CsvMapper
         write_inheritable_attribute(:map_fields_options, options)
       end
     end
-    
+
     def import
       resource_name = self.class.name.gsub(/Controller/, '').singularize
       resource_class = resource_name.constantize
       if request.post?
         # already mapped
         if params[:fields]
-          save_errors = []
-          reader = CsvMapper::Reader.new(params)
-          reader.each do |row|
-            resource = resource_class.new(row)
-            unless resource.save
-              save_errors.push resource.errors
-            end
-          end
-          if save_errors.empty?
+          create_resource_items_from_csv(resource_class)
+          if @csv_import_errors.empty?
             flash[:notice] = 'Daten erfolgreich importiert!'
-            reader.remove_file
             redirect_to :action => :index
           else
-            flash[:warning] = save_errors
-            render 'controller_actions/import'
+            flash[:warning] = @csv_import_errors
+            redirect_to :back
           end
         #no mapping yet
         else
@@ -59,6 +51,22 @@ module CsvMapper
     rescue FasterCSV::MalformedCSVError => e
       flash[:warning] = 'Fehlerhaft formatierte CSV-Datei: ' + e
       render 'controller_actions/import'
+    rescue Errno::ENOENT
+      flash[:warning] = 'Datei nicht mehr auf dem Server. Bitte erneut hochladen!'
+      render 'controller_actions/import'
+    end
+
+private
+    def create_resource_items_from_csv(resource_class)
+      @csv_import_errors = []
+      reader = CsvMapper::Reader.new(params)
+      reader.each do |row|
+        resource = resource_class.new(row)
+        unless resource.save
+          @csv_import_errors.push resource.errors
+        end
+      end
+      reader.remove_file if @csv_import_errors.empty?
     end
     
   end
