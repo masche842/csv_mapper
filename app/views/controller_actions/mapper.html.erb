@@ -8,7 +8,7 @@
     <table cellspacing="0">
       <thead>
         <tr>
-          <%- header = @mapper.raw_data.first -%>
+          <%- header = @raw_data.first -%>
           <%- header.size.times do |column_index| -%>
             <th>
               <%= select_tag("fields[#{column_index + 1}]", options_for_select(
@@ -20,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <%- @mapper.raw_data.each do |row| -%>
+        <%- @raw_data.each do |row| -%>
           <tr>
             <%- row.each do |column| -%>
               <td><%= h(column) -%></td>

@@ -45,6 +45,7 @@ module CsvMapper
         #no mapping yet
         else
           @mapper = CsvMapper::Importer.new(params, self.class.read_inheritable_attribute(:map_fields_options))
+          @raw_data = @mapper.raw_data
           render 'controller_actions/mapper'
         end
       else
@@ -55,9 +56,9 @@ module CsvMapper
     rescue CsvMapper::MissingFileContentsError
       flash[:warning] = 'Bitte eine CSV-Datei hochladen.'
       render 'controller_actions/import'
-    #rescue Exception => e
-    #  flash[:warning] = 'Unbekannter Fehler: ' + e
-    #  render 'controller_actions/import'
+    rescue FasterCSV::MalformedCSVError => e
+      flash[:warning] = 'Fehlerhaft formatierte CSV-Datei: ' + e
+      render 'controller_actions/import'
     end
     
   end

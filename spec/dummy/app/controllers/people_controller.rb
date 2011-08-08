@@ -9,8 +9,16 @@ class PeopleController < ApplicationController
     }
   )
 
-  # GET /my_models
+  # GET /people
   def index
     @people = Person.all
   end
+
+  # DELETE /people/1
+  def destroy
+    @person = Person.find(params[:id])
+    @person.destroy
+    redirect_to(people_url)
+  end
+
 end

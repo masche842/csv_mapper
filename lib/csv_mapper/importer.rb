@@ -1,18 +1,21 @@
 require 'fastercsv'
 
 class CsvMapper::Importer
-  attr_accessor :map_fields, :raw_data, :filename
+  attr_reader :map_fields, :filename
 
   def initialize(params, options)
-    @params = params
+    @file_handler = CsvMapper::FileHandler.new()
 
-    file_handler = CsvMapper::FileHandler.new()
-    if file_handler.save_temp_file(params[options[:file_field]])
-      @filename = file_handler.filename
-      @raw_data = FasterCSV.open(file_handler.file_path, CsvMapper.options)
+    if @file_handler.save_temp_file(params[options[:file_field]])
+      @filename = @file_handler.filename
       @map_fields = options[:mapping]
     else
       raise CsvMapper::MissingFileContentsError
     end
   end
+
+  def raw_data
+    FasterCSV.read(@file_handler.file_path, CsvMapper.options)
+  end
+
 end
