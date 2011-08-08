@@ -5,6 +5,7 @@ module CsvMapper
     
     def self.included(base)
       base.extend(ClassMethods)
+      base.csv_mapper_config
     end
     
     module ClassMethods
@@ -54,6 +55,9 @@ module CsvMapper
     rescue CsvMapper::MissingFileContentsError
       flash[:warning] = 'Bitte eine CSV-Datei hochladen.'
       render 'controller_actions/import'
+    #rescue Exception => e
+    #  flash[:warning] = 'Unbekannter Fehler: ' + e
+    #  render 'controller_actions/import'
     end
     
   end

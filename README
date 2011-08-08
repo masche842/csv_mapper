@@ -24,9 +24,13 @@ Include it in your myresource-controller:
 
     require 'csv_mapper'
 
-    include CsvMapper
+    include CsvMapper::ControllerActions
 
 
 == Usage
 
 call /myresources/import!
+
+== License
+
+MIT License. Copyright 2011 magiclabs* (magiclabs.de)

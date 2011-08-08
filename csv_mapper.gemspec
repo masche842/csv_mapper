@@ -8,8 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Marc"]
   s.email       = ["marc@magiclabs.de"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Provides a controller action and views for uploading, mapping and importing data from a csv}
 
   s.rubyforge_project = "csv_mapper"
 
@@ -17,4 +16,6 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+
+  s.add_dependency("fastercsv")
 end
