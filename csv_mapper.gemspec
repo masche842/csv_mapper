@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = CsvMapper::VERSION
   s.authors     = ["Marc"]
   s.email       = ["marc@magiclabs.de"]
-  s.homepage    = "magiclabs.de"
+  s.homepage    = "http://magiclabs.de"
   s.summary     = %q{Provides a controller action and views for uploading, mapping and importing data from a csv}
 
   s.rubyforge_project = "csv_mapper"

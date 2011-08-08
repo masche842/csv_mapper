@@ -7,7 +7,7 @@ It includes the complete workflow: Csv-Upload, auto-matching and review, importi
 
 Rails 3 & Ruby 1.8.7
 
-In principle it will also work with Ruby 1.9, whereas changes has to be made as FasterCSV is already integrated.
+In principle it will also work with Ruby 1.9, whereas changes has to be made as FasterCSV is already integrated named as CSV.
 
 == Installation
 
