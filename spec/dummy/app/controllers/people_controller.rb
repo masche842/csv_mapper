@@ -8,4 +8,9 @@ class PeopleController < ApplicationController
       "Lastname"  =>  :lastname
     }
   )
+
+  # GET /my_models
+  def index
+    @people = Person.all
+  end
 end
