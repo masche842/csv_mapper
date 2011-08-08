@@ -1,17 +1,21 @@
 == Description
 
-This gem adds a new import-action everywhere you include it. It asks for a csv-File, then tries to automatch the fields.
-It renders a match-view to review the mapping and finally saves the new entries.
+This gem adds an import-action in every controller you like to be able to handle csv-Imports.
+It includes the complete workflow: Csv-Upload, auto-matching and review, importing data into model.
+
+== Requirements
+
+Rails 3 & Ruby 1.8.7
+
+In principle it will also work with Ruby 1.9, whereas changes has to be made as FasterCSV is already integrated.
 
 == Installation
-
-Rails 3:
 
 Gemfile:
 
     gem 'csv_mapper', :git => git://github.com/masche842/csv_mapper.git
 
-Then set a route:
+Set up a new route to point to the import action (get & post will be needed!):
 
 routes.rb
 
@@ -20,12 +24,21 @@ routes.rb
       post 'import', :on => :collection
     end
 
-Include it in your myresource-controller:
+Include it in your Controller:
 
     require 'csv_mapper'
-
     include CsvMapper::ControllerActions
 
+Set up the fields to map to:
+
+    csv_mapper_config(
+      :mapping => {
+        "Firstname" => :firstname,
+        "Lastname"  =>  :lastname
+      }
+    )
+
+See also the implementation in spec/dummy!
 
 == Usage
 
