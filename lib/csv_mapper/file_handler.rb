@@ -17,15 +17,15 @@ class CsvMapper::FileHandler
     File.exist?(file_path)
   end
 
-  def file_path
-    File.join(@path, @filename)
-  end
-
   def remove_file
     File.delete(file_path)
   end
 
 private
+
+  def file_path
+    File.join(@path, @filename)
+  end
 
   def unique_filename
     t = Time.now.strftime("%Y%m%d")
